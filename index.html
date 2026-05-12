@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>මහා බත් දන්සල 2026 | Maha Bath Dansala Management Portal</title>
+    <meta name="description" content="Premium Cloud-Synced Management Portal for Maha Bath Dansala 2026. Track donors, menu items, funds, checklists, and countdown.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+Sinhala:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Vanilla CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Three.js Interactive Background Canvas -->
+    <div id="canvas-container"></div>
+
+    <!-- App Header -->
+    <header class="app-header glass-panel">
+        <div class="header-content">
+            <div class="brand-title">
+                <h1>මහා බත් දන්සල <span class="year-badge">2026</span></h1>
+                <p class="subtitle">Main Checklist & Event Portal</p>
+            </div>
+            <div class="cloud-status-badge" id="cloud-status" title="Real-time multi-device sync status">
+                <span class="status-indicator loading"></span>
+                <span class="status-text">Connecting Sync...</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="app-main">
+        <!-- Notification Toast -->
+        <div id="toast-container" class="toast-container"></div>
+
+        <!-- Section Navigation Tabs -->
+        <nav class="tab-navigation glass-panel">
+            <button class="tab-btn active" data-tab="dashboard">
+                <i class="fa-solid fa-chart-pie"></i>
+                <span>Dashboard</span>
+            </button>
+            <button class="tab-btn" data-tab="menu-goods">
+                <i class="fa-solid fa-bowl-rice"></i>
+                <span>Menu & Goods</span>
+            </button>
+            <button class="tab-btn" data-tab="money-donors">
+                <i class="fa-solid fa-hand-holding-dollar"></i>
+                <span>Funds</span>
+            </button>
+            <button class="tab-btn" data-tab="contacts">
+                <i class="fa-solid fa-address-book"></i>
+                <span>Contacts</span>
+            </button>
+            <button class="tab-btn" data-tab="checklist-notes">
+                <i class="fa-solid fa-list-check"></i>
+                <span>Checklist</span>
+            </button>
+            <button class="tab-btn" data-tab="cloud-settings">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <span>Sync/History</span>
+            </button>
+        </nav>
+
+        <!-- TAB CONTENT AREAS -->
+
+        <!-- 1. DASHBOARD TAB -->
+        <section id="tab-dashboard" class="tab-section active">
+            <!-- Countdown Banner -->
+            <div class="card glass-card hero-countdown-card">
+                <div class="card-header-center">
+                    <span class="glow-icon"><i class="fa-solid fa-hourglass-half"></i></span>
+                    <h2>Countdown to Great Event</h2>
+                    <p class="target-date-label">Scheduled Date: <strong>30.05.2026</strong></p>
+                </div>
+                <div class="countdown-grid" id="countdown">
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="cd-days">00</div>
+                        <div class="countdown-label">Days</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="cd-hours">00</div>
+                        <div class="countdown-label">Hours</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="cd-minutes">00</div>
+                        <div class="countdown-label">Minutes</div>
+                    </div>
+                    <div class="countdown-item">
+                        <div class="countdown-value" id="cd-seconds">00</div>
+                        <div class="countdown-label">Seconds</div>
+                    </div>
+                </div>
+                <div class="progress-bar-container mt-4">
+                    <div class="progress-bar-fill timer-fill" id="timer-progress" style="width: 100%"></div>
+                </div>
+            </div>
+
+            <!-- Overall Progress Summary -->
+            <div class="card glass-card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <i class="fa-solid fa-chart-line text-gold"></i>
+                        <h3>Overall Targets & Progress</h3>
+                    </div>
+                    <button class="btn-icon-small" id="btn-edit-targets" title="Edit Goal Targets">
+                        <i class="fa-solid fa-bullseye"></i> Edit Targets
+                    </button>
+                </div>
+                
+                <div class="targets-summary-grid">
+                    <!-- Goods Progress -->
+                    <div class="target-stat-box">
+                        <div class="stat-header">
+                            <span class="stat-label">Goods & Items Secured</span>
+                            <span class="stat-percentage" id="goods-percentage">0%</span>
+                        </div>
+                        <div class="stat-numbers">
+                            <h4 id="goods-collected-count">0</h4>
+                            <span class="stat-target">/ <span id="goods-target-count">15</span> items ready</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill bg-gold" id="goods-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Funds Progress -->
+                    <div class="target-stat-box">
+                        <div class="stat-header">
+                            <span class="stat-label">Financial Contributions</span>
+                            <span class="stat-percentage" id="funds-percentage">0%</span>
+                        </div>
+                        <div class="stat-numbers">
+                            <h4 id="funds-collected-total">Rs. 0</h4>
+                            <span class="stat-target">/ <span id="funds-target-total">Rs. 200,000</span> needed</span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill bg-green" id="funds-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quick-stats-footer">
+                    <div class="mini-stat">
+                        <i class="fa-solid fa-users"></i>
+                        <span>Total Contributors: <strong id="total-contributors-count">0</strong></span>
+                    </div>
+                    <div class="mini-stat">
+                        <i class="fa-solid fa-boxes-packing"></i>
+                        <span>Pending Checklists: <strong id="pending-checklists-count">0</strong></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Last Cloud Sync Log Quick Glance -->
+            <div class="card glass-card simple-card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <i class="fa-solid fa-history text-muted"></i>
+                        <h4 class="text-sm">Recent Multi-Device History</h4>
+                    </div>
+                    <span class="text-xs text-muted" id="last-updated-time">Never</span>
+                </div>
+                <p class="text-xs text-muted mt-2" id="last-action-text">No updates recorded yet. Make edits to start saving history permanently across devices.</p>
+            </div>
+        </section>
+
+        <!-- 2. MENU & GOODS DONORS TAB -->
+        <section id="tab-menu-goods" class="tab-section">
+            <div class="card glass-card">
+                <div class="card-header flex-wrap">
+                    <div class="card-title-group">
+                        <i class="fa-solid fa-utensils text-gold"></i>
+                        <div>
+                            <h3>Menu Items & Goods Donors</h3>
+                            <p class="card-subtitle">Manage menu checklist, objects required, and assigned donors</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="btn-add-goods">
+                        <i class="fa-solid fa-plus"></i> Add Menu / Goods Item
+                    </button>
+                </div>
+
+                <!-- Goods Search & Filter -->
+                <div class="filter-bar">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="search-goods" placeholder="Search item or donor name...">
+                    </div>
+                    <div class="filter-chips">
+                        <button class="chip active" data-filter="all">All</button>
+                        <button class="chip" data-filter="delivered">Delivered</button>
+                        <button class="chip" data-filter="pending">Pending</button>
+                    </div>
+                </div>
+
+                <!-- Goods Table List -->
+                <div class="table-responsive">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Menu / Object Item</th>
+                                <th>Donor Name</th>
+                                <th>Promised Amount</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="goods-table-body">
+                            <!-- Dynamically loaded -->
+                        </tbody>
+                    </table>
+                    <div id="goods-empty-state" class="empty-state">
+                        <i class="fa-solid fa-box-open"></i>
+                        <p>No menu items or goods added yet.</p>
+                        <button class="btn btn-outline-gold mt-2 btn-add-goods-trigger">Add First Item</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. MONEY DONORS TAB -->
+        <section id="tab-money-donors" class="tab-section">
+            <div class="alert alert-warning mb-4">
+                <i class="fa-solid fa-lock"></i>
+                <div class="alert-content">
+                    <strong>Crucial Security Enabled</strong>
+                    <p>Editing or viewing complete actions on financial donations requires the master authentication password.</p>
+                </div>
+            </div>
+
+            <div class="card glass-card">
+                <div class="card-header flex-wrap">
+                    <div class="card-title-group">
+                        <i class="fa-solid fa-sack-dollar text-green"></i>
+                        <div>
+                            <h3>Financial Contributions</h3>
+                            <p class="card-subtitle">Secure logs of funds received for procurement</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-success" id="btn-add-money">
+                        <i class="fa-solid fa-plus"></i> Record Donation
+                    </button>
+                </div>
+
+                <!-- Money Totals Banner -->
+                <div class="money-total-banner">
+                    <div class="total-label">Total Funds Collected</div>
+                    <div class="total-amount" id="display-total-money">Rs. 0.00</div>
+                </div>
+
+                <!-- Money Table List -->
+                <div class="table-responsive">
+                    <table class="styled-table">
+                        <thead>
+                            <tr>
+                                <th>Donor Name</th>
+                                <th>Amount (LKR)</th>
+                                <th>Payment Method / Note</th>
+                                <th>Date Recorded</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="money-table-body">
+                            <!-- Dynamically loaded -->
+                        </tbody>
+                    </table>
+                    <div id="money-empty-state" class="empty-state">
+                        <i class="fa-solid fa-wallet"></i>
+                        <p>No financial contributions logged yet.</p>
+                        <button class="btn btn-outline-green mt-2 btn-add-money-trigger">Record First Donation</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. CONTACTS / PHONE NUMBERS TAB -->
+        <section id="tab-contacts" class="tab-section">
+            <div class="alert alert-warning mb-4">
+                <i class="fa-solid fa-shield-halved"></i>
+                <div class="alert-content">
+                    <strong>Protected Directory</strong>
+                    <p>Phone numbers and critical personal info are protected. Editing requires authentication.</p>
+                </div>
+            </div>
+
+            <div class="card glass-card">
+                <div class="card-header flex-wrap">
+                    <div class="card-title-group">
+                        <i class="fa-solid fa-address-card text-gold"></i>
+                        <div>
+                            <h3>Permanent Phone Directory</h3>
+                            <p class="card-subtitle">Key personnel, donors, suppliers and organizer contacts</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" id="btn-add-contact">
+                        <i class="fa-solid fa-user-plus"></i> Add Contact
+                    </button>
+                </div>
+
+                <div class="search-box mb-4">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="search-contacts" placeholder="Search by name, role or number...">
+                </div>
+
+                <!-- Contacts Grid -->
+                <div class="contacts-grid" id="contacts-grid-container">
+                    <!-- Dynamically loaded -->
+                </div>
+                <div id="contacts-empty-state" class="empty-state">
+                    <i class="fa-solid fa-users-slash"></i>
+                    <p>No phone numbers or personnel information saved yet.</p>
+                    <button class="btn btn-outline-gold mt-2 btn-add-contact-trigger">Add First Contact</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. CHECKLIST & QUICK NOTES TAB -->
+        <section id="tab-checklist-notes" class="tab-section">
+            <div class="grid-layout-2">
+                <!-- Left: Delivery Validation Checklist -->
+                <div class="card glass-card">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <i class="fa-solid fa-list-check text-gold"></i>
+                            <h3>Goods Receipt Validation</h3>
+                        </div>
+                    </div>
+                    <p class="text-xs text-muted mb-3">Quickly mark if pledged goods/menu components have arrived physically at the premises.</p>
+                    
+                    <div class="checklist-items-container" id="quick-checklist-container">
+                        <!-- Dynamically generated from menu-goods array -->
+                    </div>
+                </div>
+
+                <!-- Right: Quick Notes -->
+                <div class="card glass-card flex-col">
+                    <div class="card-header">
+                        <div class="card-title-group">
+                            <i class="fa-solid fa-note-sticky text-gold"></i>
+                            <h3>Quick Dashboard Notes</h3>
+                        </div>
+                        <button class="btn-icon-small" id="btn-save-notes" title="Force Sync Notes">
+                            <i class="fa-solid fa-floppy-disk"></i> Save Note
+                        </button>
+                    </div>
+                    <p class="text-xs text-muted mb-3">Shared notes pad synchronized across all client devices.</p>
+                    
+                    <div class="textarea-wrapper flex-grow">
+                        <textarea id="quick-notes-area" placeholder="Type important planning reminders, shopping lists, or team instructions here... Auto-saves on typing."></textarea>
+                    </div>
+                    <div class="textarea-footer mt-2">
+                        <span class="text-xs text-muted" id="notes-status-indicator">Ready</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. CLOUD SYNC & SETTINGS TAB -->
+        <section id="tab-cloud-settings" class="tab-section">
+            <div class="card glass-card mb-4">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <i class="fa-solid fa-cloud text-gold"></i>
+                        <div>
+                            <h3>Multi-Device History & Cloud Sync Engine</h3>
+                            <p class="card-subtitle">State retention ensuring edits survive across device restarts</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-success" id="btn-manual-sync">
+                        <i class="fa-solid fa-rotate"></i> Sync Now
+                    </button>
+                </div>
+
+                <div class="cloud-info-box">
+                    <div class="cloud-info-row">
+                        <span>Current Sync Provider:</span>
+                        <strong>JSONBin.io Secure Vault API</strong>
+                    </div>
+                    <div class="cloud-info-row">
+                        <span>Database Cloud Vault ID:</span>
+                        <div class="vault-id-display">
+                            <input type="text" id="input-vault-id" readonly value="loading...">
+                            <button class="btn-icon-small" id="btn-copy-vault" title="Copy to connect another phone"><i class="fa-regular fa-copy"></i> Copy Link ID</button>
+                        </div>
+                    </div>
+                    <p class="text-xs text-muted mt-2">
+                        <i class="fa-solid fa-circle-info text-gold"></i> 
+                        <strong>How multi-device history works:</strong> Any change you make automatically broadcasts to the persistent secure storage bucket. When you open this application on any other mobile phone or computer, it queries the identical bucket ID to reconstruct complete historical updates perfectly.
+                    </p>
+                </div>
+
+                <!-- Custom Storage Setup Link Options -->
+                <div class="advanced-sync-collapse mt-4">
+                    <h4 class="text-sm font-semibold mb-2 flex-align-center"><i class="fa-solid fa-sliders text-gold mr-2"></i> Custom Link / Database Override</h4>
+                    <p class="text-xs text-muted mb-3">If you wish to host your own separate synchronized room or join an existing coordinator's phone setup, input their specific database Vault ID below:</p>
+                    
+                    <div class="input-group-row">
+                        <input type="text" id="custom-vault-input" placeholder="Paste custom Vault ID here...">
+                        <button class="btn btn-outline-gold" id="btn-apply-vault">Connect custom vault</button>
+                        <button class="btn btn-outline-danger" id="btn-reset-vault" title="Reset to official preset vault">Reset Default</button>
+                    </div>
+                </div>
+
+                <div class="divider"></div>
+
+                <!-- Master Security Config -->
+                <div class="security-config-section mt-4">
+                    <h4 class="text-sm font-semibold mb-2 flex-align-center"><i class="fa-solid fa-key text-gold mr-2"></i> Update Password Protection</h4>
+                    <p class="text-xs text-muted mb-3">Change the authorization password required for updating crucial fields (Money & Contact numbers).</p>
+                    
+                    <div class="password-update-grid">
+                        <input type="password" id="input-old-pass" placeholder="Current Password">
+                        <input type="password" id="input-new-pass" placeholder="New Password">
+                        <button class="btn btn-primary" id="btn-update-pass">Update Password</button>
+                    </div>
+                    <span class="text-xs text-muted mt-1 block">Default pre-set system code is: <code>dansala2026</code></span>
+                </div>
+            </div>
+
+            <!-- Audit History Log List -->
+            <div class="card glass-card">
+                <div class="card-header">
+                    <div class="card-title-group">
+                        <i class="fa-solid fa-list-ul text-gold"></i>
+                        <h3>Historical Action Log</h3>
+                    </div>
+                    <button class="btn-icon-small text-danger" id="btn-clear-history">
+                        <i class="fa-solid fa-trash-can"></i> Clear Log
+                    </button>
+                </div>
+                <p class="text-xs text-muted mb-3">Permanent audit logs tracking item assignments, funding receipts, and status modifications.</p>
+
+                <div class="history-timeline" id="history-log-container">
+                    <!-- Dynamically populated -->
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- App Footer -->
+    <footer class="app-footer">
+        <p>මහා බත් දන්සල 2026 &copy; Complete Management System. Crafted with Custom CSS & Three.js Interactive 3D graphics.</p>
+    </footer>
+
+    <!-- MODAL DIALOGS -->
+
+    <!-- 1. Password Verification Modal -->
+    <div id="modal-password" class="modal-backdrop">
+        <div class="modal-card glass-modal">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-lock text-gold mr-2"></i> Authentication Required</h3>
+                <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-sm mb-3">Please provide the Master Access Password to perform operations on sensitive financial details or phone directories.</p>
+                <div class="input-field">
+                    <label for="auth-password-input">Master Password</label>
+                    <input type="password" id="auth-password-input" placeholder="Enter password...">
+                    <span class="text-xs text-danger mt-1 hidden" id="auth-error-msg">Incorrect password. Try again.</span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-muted modal-close-btn">Cancel</button>
+                <button class="btn btn-primary" id="btn-confirm-password">Authenticate</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Add / Edit Goods Modal -->
+    <div id="modal-goods" class="modal-backdrop">
+        <div class="modal-card glass-modal">
+            <div class="modal-header">
+                <h3 id="modal-goods-title">Add Menu / Goods Object</h3>
+                <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-goods" onsubmit="return false;">
+                    <input type="hidden" id="goods-id">
+                    <div class="input-field">
+                        <label for="goods-item-name">Menu Item / Required Object Name *</label>
+                        <input type="text" id="goods-item-name" required placeholder="e.g. සම්බා සහල් / Samba Rice">
+                    </div>
+                    <div class="input-field">
+                        <label for="goods-donor-name">Sponsor / Donor Name *</label>
+                        <input type="text" id="goods-donor-name" required placeholder="e.g. Mr. Sunil Perera">
+                    </div>
+                    <div class="input-field">
+                        <label for="goods-amount">Pledged Amount / Quantity *</label>
+                        <input type="text" id="goods-amount" required placeholder="e.g. 50 Kg / 100 Packets">
+                    </div>
+                    <div class="checkbox-field mt-3">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" id="goods-status">
+                            <span class="checkmark"></span>
+                            <span class="checkbox-text font-medium">Goods currently delivered / handed over</span>
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-muted modal-close-btn">Cancel</button>
+                <button class="btn btn-primary" id="btn-save-goods-form">Save Object</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Add / Edit Money Modal -->
+    <div id="modal-money" class="modal-backdrop">
+        <div class="modal-card glass-modal">
+            <div class="modal-header">
+                <h3 id="modal-money-title">Log Financial Contribution</h3>
+                <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-money" onsubmit="return false;">
+                    <input type="hidden" id="money-id">
+                    <div class="input-field">
+                        <label for="money-donor-name">Contributor Name *</label>
+                        <input type="text" id="money-donor-name" required placeholder="e.g. Saman Kumara">
+                    </div>
+                    <div class="input-field">
+                        <label for="money-amount">Donation Value (LKR) *</label>
+                        <input type="number" id="money-amount" min="1" step="any" required placeholder="e.g. 15000">
+                    </div>
+                    <div class="input-field">
+                        <label for="money-note">Transfer Method / Optional Notes</label>
+                        <input type="text" id="money-note" placeholder="e.g. Bank Deposit / Cash Transfer">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-muted modal-close-btn">Cancel</button>
+                <button class="btn btn-success" id="btn-save-money-form">Confirm Funds</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Add / Edit Contact Modal -->
+    <div id="modal-contact" class="modal-backdrop">
+        <div class="modal-card glass-modal">
+            <div class="modal-header">
+                <h3 id="modal-contact-title">Permanent Directory Info</h3>
+                <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-contact" onsubmit="return false;">
+                    <input type="hidden" id="contact-id">
+                    <div class="input-field">
+                        <label for="contact-name">Person Name *</label>
+                        <input type="text" id="contact-name" required placeholder="e.g. Ajith Silva">
+                    </div>
+                    <div class="input-field">
+                        <label for="contact-phone">Mobile / Phone Number *</label>
+                        <input type="tel" id="contact-phone" required placeholder="e.g. 077 123 4567">
+                    </div>
+                    <div class="input-field">
+                        <label for="contact-role">Role / Responsibilities</label>
+                        <input type="text" id="contact-role" placeholder="e.g. Head of Transport / Dry Rations Supplier">
+                    </div>
+                    <div class="input-field">
+                        <label for="contact-info">Extra Notes / Address</label>
+                        <textarea id="contact-info" rows="2" placeholder="e.g. Located near the central temple avenue"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-muted modal-close-btn">Cancel</button>
+                <button class="btn btn-primary" id="btn-save-contact-form">Save Info Permanently</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Edit Targets Modal -->
+    <div id="modal-targets" class="modal-backdrop">
+        <div class="modal-card glass-modal">
+            <div class="modal-header">
+                <h3>Update Campaign Goal Targets</h3>
+                <button class="modal-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <div class="input-field">
+                    <label for="target-input-goods">Target Menu Components / Goods Count</label>
+                    <input type="number" id="target-input-goods" min="1" value="15">
+                </div>
+                <div class="input-field mt-3">
+                    <label for="target-input-funds">Target Funds Needed (LKR)</label>
+                    <input type="number" id="target-input-funds" min="1000" step="1000" value="200000">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-muted modal-close-btn">Cancel</button>
+                <button class="btn btn-primary" id="btn-save-targets">Apply Targets</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- External JavaScript CDN Dependencies -->
+    <!-- Three.js for interactive premium 3D animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- App Logic Script -->
+    <script src="app.js"></script>
+</body>
+</html>
