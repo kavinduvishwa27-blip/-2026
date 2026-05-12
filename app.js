@@ -1204,7 +1204,7 @@ function setupEventListeners() {
     document.getElementById('btn-reset-vault')?.addEventListener('click', () => {
         localStorage.removeItem('dansala_custom_bin_id');
         document.getElementById('custom-vault-input').value = '';
-        STATE.vaultId = "dansala_master_vault_2026";
+        STATE.vaultId = "1306283995818467328";
         showToast('info', 'Reverted back to pre-configured primary event coordination setup.');
         loadFromCloud();
     });
